@@ -186,4 +186,22 @@ describe('6 sets won', () => {
       expect(score()).toBe('6-0, 0-0, Winner is Player 1');
     });
   })
+
+  describe('By Player 1', () => {
+    beforeEach(() => {
+      const SETS_WON = 6
+      const POINTS_WON = SETS_WON * 4
+      manyPointsWon(1, POINTS_WON)
+    })
+
+    test('Game score should be "0-0"', () => {
+      expect(evaluateGameScore()).toBe('0-0');
+    });
+    test('Set score should be "0-6"', () => {
+      expect(evaluateSetScore()).toBe('0-6');
+    });
+    test('Score function should return "0-6, 0-0, Winner is Player 2"', () => {
+      expect(score()).toBe('0-6, 0-0, Winner is Player 2');
+    });
+  })
 })
