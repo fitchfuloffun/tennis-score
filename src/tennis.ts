@@ -13,6 +13,8 @@ const players: Player[] = [{
   gameScore: 0
 }]
 
+let winner: number = -1
+
 export const evaluateGameScore = () => {
   if (players[0].gameScore >= 3 && players[1].gameScore >= 3) {
     if (players[0].gameScore === players[1].gameScore) return "Deuce"
@@ -34,7 +36,9 @@ export const evaluateSetScore = () => {
 }
 
 export const score = (): string => {
-  return `${evaluateSetScore()}, ${evaluateGameScore()}`;
+  const winnerString = winner >= 0 ? `, Winner is Player ${winner+1}` : ""
+
+  return `${evaluateSetScore()}, ${evaluateGameScore()}${winnerString}`;
 }
 
 export const pointWonBy = (player: number) => {
@@ -77,8 +81,15 @@ const getGameScoreDisplay = (player: number): GameScoreDisplay => {
 const addSetScorePoint = (player: number): number => {
   players[player].setScore++
   resetGamePoints()
+  checkForWinner(player)
 
   return 0
+}
+
+const checkForWinner = (player: number) => {
+  const opponent = getOpponent(player)
+
+  if (players[player].setScore >= 6 && players[opponent].setScore < 5) winner = player
 }
 
 const resetGamePoints = () => {
@@ -90,4 +101,5 @@ export const resetAll = () => {
   resetGamePoints()
   players[0].setScore = 0
   players[1].setScore = 0
+  winner = -1
 }
