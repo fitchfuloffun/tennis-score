@@ -1,7 +1,7 @@
-type GameScore = 0 | 15 | 30 | 40 | 'Advantage'
+type GameScoreDisplay = 0 | 15 | 30 | 40 | 'Advantage'
 interface Player {
   setScore: number,
-  gameScore: GameScore
+  gameScore: number
 }
 
 const players: Player[] = [{
@@ -14,7 +14,19 @@ const players: Player[] = [{
 }]
 
 export const evaluateGameScore = () => {
-  return `${players[0].gameScore}-${players[1].gameScore}`
+  if (players[0].gameScore >= 3 && players[1].gameScore >= 3) {
+    if (players[0].gameScore === players[1].gameScore) return "Deuce"
+  }
+
+  const gameScoreDisplays = [
+    getGameScoreDisplay(0),
+    getGameScoreDisplay(1)
+  ]
+
+  const playerWithAdvantage = gameScoreDisplays.findIndex((score) => score === "Advantage")
+  if (playerWithAdvantage !== -1) return `Advantage Player ${playerWithAdvantage+1}`
+
+  return `${gameScoreDisplays[0]}-${gameScoreDisplays[1]}`
 }
 
 export const evaluateSetScore = () => {
@@ -29,23 +41,40 @@ export const pointWonBy = (player: number) => {
   players[player].gameScore = addGameScorePoint(player)
 }
 
-const addGameScorePoint = (player: number): GameScore => {
-  switch (players[player].gameScore) {
-    case 40:
-      const opponent = player ? 0 : 1
-      return players[opponent].gameScore === 40 ? 'Advantage' : addSetScorePoint(player)
-    case 30:
-      return 40
-    case 15:
-      return 30
+const getOpponent = (player: number) => player === 0 ? 1 : 0
+
+const addGameScorePoint = (player: number): number => {
+  const opponent = getOpponent(player)
+
+  players[player].gameScore++ 
+  if (players[player].gameScore > 3) {
+    if (players[player].gameScore - players[opponent].gameScore >= 2) return addSetScorePoint(player)
+  }
+
+  return players[player].gameScore
+}
+
+const getGameScoreDisplay = (player: number): GameScoreDisplay => {
+  const playerGameScore = players[player].gameScore
+  const opponent = getOpponent(player)
+
+  if (players[opponent].gameScore >= 3 && playerGameScore > players[opponent].gameScore) return "Advantage"
+
+  switch (playerGameScore) {
     case 0:
+      return 0
+    case 1:
       return 15
+    case 2:
+      return 30
+    case 3:
+      return 40
     default:
       return 0
   }
 }
 
-const addSetScorePoint = (player: number): GameScore => {
+const addSetScorePoint = (player: number): number => {
   players[player].setScore++
   resetGamePoints()
 
