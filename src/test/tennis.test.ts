@@ -170,38 +170,86 @@ describe('3 points won by Player 1 and Player 2', () => {
 
 describe('6 sets won', () => {
   describe('By Player 1', () => {
-    beforeEach(() => {
-      const SETS_WON = 6
-      const POINTS_WON = SETS_WON * 4
-      manyPointsWon(0, POINTS_WON)
+    describe('Uncontested', () => {
+      beforeEach(() => {
+        const SETS_WON = 6
+        const POINTS_WON = SETS_WON * 4
+        manyPointsWon(0, POINTS_WON)
+      })
+
+      test('Game score should be "0-0"', () => {
+        expect(evaluateGameScore()).toBe('0-0');
+      });
+      test('Set score should be "6-0"', () => {
+        expect(evaluateSetScore()).toBe('6-0');
+      });
+      test('Score function should return "6-0, 0-0, Winner is Player 1"', () => {
+        expect(score()).toBe('6-0, 0-0, Winner is Player 1');
+      });
     })
 
-    test('Game score should be "0-0"', () => {
-      expect(evaluateGameScore()).toBe('0-0');
-    });
-    test('Set score should be "6-0"', () => {
-      expect(evaluateSetScore()).toBe('6-0');
-    });
-    test('Score function should return "6-0, 0-0, Winner is Player 1"', () => {
-      expect(score()).toBe('6-0, 0-0, Winner is Player 1');
-    });
+    describe('Opponent on 5 sets first', () => {
+      beforeEach(() => {
+        const SETS_WON_BY_OPPONENT = 5
+        const POINTS_WON_BY_OPPONENT = SETS_WON_BY_OPPONENT * 4
+        manyPointsWon(1, POINTS_WON_BY_OPPONENT)
+        
+        const SETS_WON = 6
+        const POINTS_WON = SETS_WON * 4
+        manyPointsWon(0, POINTS_WON)
+      })
+
+      test('Game score should be "0-0"', () => {
+        expect(evaluateGameScore()).toBe('0-0');
+      });
+      test('Set score should be "6-5"', () => {
+        expect(evaluateSetScore()).toBe('6-5');
+      });
+      test('Score function should return "6-5, 0-0"', () => {
+        expect(score()).toBe('6-5, 0-0');
+      });
+    })
   })
 
-  describe('By Player 1', () => {
-    beforeEach(() => {
-      const SETS_WON = 6
-      const POINTS_WON = SETS_WON * 4
-      manyPointsWon(1, POINTS_WON)
+  describe('By Player 2', () => {
+    describe('Uncontested', () => {
+      beforeEach(() => {
+        const SETS_WON = 6
+        const POINTS_WON = SETS_WON * 4
+        manyPointsWon(1, POINTS_WON)
+      })
+
+      test('Game score should be "0-0"', () => {
+        expect(evaluateGameScore()).toBe('0-0');
+      });
+      test('Set score should be "0-6"', () => {
+        expect(evaluateSetScore()).toBe('0-6');
+      });
+      test('Score function should return "0-6, 0-0, Winner is Player 2"', () => {
+        expect(score()).toBe('0-6, 0-0, Winner is Player 2');
+      });
     })
 
-    test('Game score should be "0-0"', () => {
-      expect(evaluateGameScore()).toBe('0-0');
-    });
-    test('Set score should be "0-6"', () => {
-      expect(evaluateSetScore()).toBe('0-6');
-    });
-    test('Score function should return "0-6, 0-0, Winner is Player 2"', () => {
-      expect(score()).toBe('0-6, 0-0, Winner is Player 2');
-    });
+    describe('Opponent on 5 sets first', () => {
+      beforeEach(() => {
+        const SETS_WON_BY_OPPONENT = 5
+        const POINTS_WON_BY_OPPONENT = SETS_WON_BY_OPPONENT * 4
+        manyPointsWon(0, POINTS_WON_BY_OPPONENT)
+        
+        const SETS_WON = 6
+        const POINTS_WON = SETS_WON * 4
+        manyPointsWon(1, POINTS_WON)
+      })
+
+      test('Game score should be "0-0"', () => {
+        expect(evaluateGameScore()).toBe('0-0');
+      });
+      test('Set score should be "5-6"', () => {
+        expect(evaluateSetScore()).toBe('5-6');
+      });
+      test('Score function should return "5-6, 0-0"', () => {
+        expect(score()).toBe('5-6, 0-0');
+      });
+    })
   })
 })
