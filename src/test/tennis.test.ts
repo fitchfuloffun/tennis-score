@@ -253,3 +253,110 @@ describe('6 sets won', () => {
     })
   })
 })
+
+describe('Tie-Break', () => {
+  describe('5 sets won by Player 1', () => {
+    beforeEach(() => {
+      const SETS_WON = 5
+      const POINTS_WON = SETS_WON * 4
+      manyPointsWon(0, POINTS_WON)
+    })
+
+    describe('6 sets won by Player 2', () => {
+      beforeEach(() => {
+        const SETS_WON = 6
+        const POINTS_WON = SETS_WON * 4
+        manyPointsWon(1, POINTS_WON)
+      })
+
+      describe('1 set won by Player 1', () => {
+        beforeEach(() => {
+          const SETS_WON = 1
+          const POINTS_WON = SETS_WON * 4
+          manyPointsWon(0, POINTS_WON)
+        })
+
+        test('Score function should return "6-6, 0-0"', () => {
+          expect(score()).toBe('6-6, 0-0');
+        });
+
+        describe('7 points won by Player 1', () => {
+          beforeEach(() => {
+            const POINTS_WON = 7
+            manyPointsWon(0, POINTS_WON)
+          })
+
+          test('Score function should return "7-6, 0-0, Winner is Player 1"', () => {
+            expect(score()).toBe('7-6, 0-0, Winner is Player 1');
+          });
+        })
+
+        describe('6 points won by Player 1', () => {
+          beforeEach(() => {
+            const POINTS_WON = 6
+            manyPointsWon(0, POINTS_WON)
+          })
+
+          test('Score function should return "6-6, 6-0"', () => {
+            expect(score()).toBe('6-6, 6-0');
+          });
+
+          describe('6 points won by Player 2', () => {
+            beforeEach(() => {
+              const POINTS_WON = 6
+              manyPointsWon(1, POINTS_WON)
+            })
+  
+            test('Score function should return "6-6, 6-6"', () => {
+              expect(score()).toBe('6-6, 6-6');
+            });
+
+            describe('1 point won by Player 1', () => {
+              beforeEach(() => {
+                const POINTS_WON = 1
+                manyPointsWon(0, POINTS_WON)
+              })
+    
+              test('Score function should return "6-6, 7-6"', () => {
+                expect(score()).toBe('6-6, 7-6');
+              });
+
+              describe('1 point won by Player 2', () => {
+                beforeEach(() => {
+                  const POINTS_WON = 1
+                  manyPointsWon(1, POINTS_WON)
+                })
+      
+                test('Score function should return "6-6, 7-7"', () => {
+                  expect(score()).toBe('6-6, 7-7');
+                });
+
+                describe('2 points won by Player 2', () => {
+                  beforeEach(() => {
+                    const POINTS_WON = 2
+                    manyPointsWon(1, POINTS_WON)
+                  })
+        
+                  test('Score function should return "6-7, 0-0, Winner is Player 2"', () => {
+                    expect(score()).toBe('6-7, 0-0, Winner is Player 2');
+                  });
+                })
+              })
+            })
+
+            describe('2 points won by Player 1', () => {
+              beforeEach(() => {
+                const POINTS_WON = 2
+                manyPointsWon(0, POINTS_WON)
+              })
+    
+              test('Score function should return "7-6, 0-0, Winner is Player 1"', () => {
+                expect(score()).toBe('7-6, 0-0, Winner is Player 1');
+              });
+            })
+          })
+        })
+      })
+    })
+  })
+})

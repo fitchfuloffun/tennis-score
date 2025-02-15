@@ -17,6 +17,8 @@ let winner: number = -1
 let tieBreak: Boolean = false
 
 export const evaluateGameScore = () => {
+  if (tieBreak) return `${players[0].gameScore}-${players[1].gameScore}`
+  
   if (players[0].gameScore >= 3 && players[1].gameScore >= 3) {
     if (players[0].gameScore === players[1].gameScore) return "Deuce"
   }
@@ -71,8 +73,6 @@ const addGameScorePoint = (player: number): number => {
 
 const getGameScoreDisplay = (player: number): GameScoreDisplay | number => {
   const playerGameScore = players[player].gameScore
-  if (tieBreak) return playerGameScore
-
   const opponent = getOpponent(player)
 
   if (players[opponent].gameScore >= 3 && playerGameScore > players[opponent].gameScore) return "Advantage"
