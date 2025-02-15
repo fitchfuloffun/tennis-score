@@ -14,6 +14,7 @@ const players: Player[] = [{
 }]
 
 let winner: number = -1
+let tieBreak: Boolean = false
 
 export const evaluateGameScore = () => {
   if (players[0].gameScore >= 3 && players[1].gameScore >= 3) {
@@ -50,7 +51,17 @@ const getOpponent = (player: number) => player === 0 ? 1 : 0
 const addGameScorePoint = (player: number): number => {
   const opponent = getOpponent(player)
 
-  players[player].gameScore++ 
+  players[player].gameScore++
+
+  if (tieBreak) {
+    console.log(players[player].gameScore)
+    if(players[player].gameScore >= 7) {
+      if (players[player].gameScore - players[opponent].gameScore >= 2) return addSetScorePoint(player)
+    }
+
+    return players[player].gameScore
+  }
+
   if (players[player].gameScore > 3) {
     if (players[player].gameScore - players[opponent].gameScore >= 2) return addSetScorePoint(player)
   }
@@ -58,8 +69,10 @@ const addGameScorePoint = (player: number): number => {
   return players[player].gameScore
 }
 
-const getGameScoreDisplay = (player: number): GameScoreDisplay => {
+const getGameScoreDisplay = (player: number): GameScoreDisplay | number => {
   const playerGameScore = players[player].gameScore
+  if (tieBreak) return playerGameScore
+
   const opponent = getOpponent(player)
 
   if (players[opponent].gameScore >= 3 && playerGameScore > players[opponent].gameScore) return "Advantage"
@@ -88,8 +101,14 @@ const addSetScorePoint = (player: number): number => {
 
 const checkForWinner = (player: number) => {
   const opponent = getOpponent(player)
+  checkForTieBreak()
 
+  if (tieBreak && players[player].setScore >= 7) winner = player
   if (players[player].setScore >= 6 && players[opponent].setScore < 5) winner = player
+}
+
+const checkForTieBreak = () => {
+  if (players[0].setScore === 6 && players[1].setScore === 6) tieBreak = true
 }
 
 const resetGamePoints = () => {
@@ -102,4 +121,5 @@ export const resetAll = () => {
   players[0].setScore = 0
   players[1].setScore = 0
   winner = -1
+  tieBreak = false
 }
